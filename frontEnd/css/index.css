@@ -131,7 +131,7 @@ button{
 }
 
 .password-container > button:active{
-    color: white;    
+    color: rgb(139, 43, 43);    
     background-color: black;
 }
 
@@ -165,7 +165,7 @@ button{
 }
 
 .login{
-    background-color: rgb(230, 230, 230);
+    background-color: rgb(234, 234, 234);
     width: 100%;
     display: block;
     height: 100vh;
