@@ -4,29 +4,105 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Smart Door Lock</title>
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="./css/index.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Axios for API requests -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
+
   <body>
-    <div class="app">
-      <div class="notification">This is notification</div>
-      <div class="screen"><img class="image"></img>
-        <span class="status">X</span>
-    </div>
+    <!-- Dashboard Screen (Hidden at first) -->
+    <div class="app" id="dashboard">
+      <div class="notification" id="dashboard_notification">This is notification</div>
+      
+      <div class="screen">
+        <div class="camera-frame">
+          <img class="image" id="camera_feed" alt="Camera Feed" />
+          <div class="camera-overlay">
+            <div class="camera-indicator">
+              <span class="camera-dot"></span>
+              <span>LIVE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-container">
+          <div class="status-badge">
+            <span class="status" id="door_status_icon">X</span>
+            <span class="status-text" id="door_status_text">Status</span>
+          </div>
+        </div>
+      </div>
+
       <div class="button-part">
-        <button class="open-button">Open</button>
-        <button class="close-button">Close</button>
+        <button class="open-button" id="unlock_button">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="button-icon">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+          </svg>
+          <span>Unlock Door</span>
+        </button>
+
+        <button class="close-button" id="lock_button">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="button-icon">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <span>Lock Door</span>
+        </button>
       </div>
     </div>
-    <div class="login app">
+
+    <!-- Login Screen (Visible at first) -->
+    <div class="login app" id="login">
       <div class="notification" id="login_notification">This is notification</div>
-      <div class="password-container">
-        <span>Password:</span><br/>
-        <input type="password" class="password" name="password"/>
-        <button class="password-submit">Login</button>
+
+      <div class="login-card">
+        <div class="login-header">
+          <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+          <h1>Smart Door Lock</h1>
+          <p>Enter your password to access the system</p>
+        </div>
+
+        <div class="password-container">
+          <label for="password">Password</label>
+          <div class="input-group">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="input-icon">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <input type="password" id="password" class="password" name="password" placeholder="Enter your password" />
+          </div>
+          <button class="password-submit" id="login_submit">
+            <span>Login</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="button-icon-right">
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="login-footer">
+          <p>Smart Door Lock System v2.0</p>
+        </div>
       </div>
     </div>
+
+    <!-- Your JavaScript -->
+    <script type="text/javascript" src="./js/index.js"></script>
   </body>
-  <script type="text/javascript" src="./js/index.js"></script>
 </html>

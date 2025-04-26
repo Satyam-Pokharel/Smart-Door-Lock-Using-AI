@@ -1,189 +1,468 @@
-
-:root{
-    --primary-color:rgb(230, 230, 230);
-    --secondary-color:FFFBEB;
-    --close:rgb(121, 2, 2);
-    --open:rgb(6, 95, 6)
+/* Base Variables */
+:root {
+  /* Black and Orange Color Palette */
+  --primary: #ff7700;
+  --primary-dark: #e56b00;
+  --primary-light: #ff9233;
+  --black: #121212;
+  --black-light: #1e1e1e;
+  --black-lighter: #2d2d2d;
+  --success: #00c853;
+  --success-dark: #009624;
+  --danger: #ff3d00;
+  --danger-dark: #dd2c00;
+  --warning: #ffc400;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  /* UI Variables */
+  --background: var(--black);
+  --card-bg: var(--black-light);
+  --text: white;
+  --text-secondary: #b3b3b3;
+  --border: var(--black-lighter);
 }
 
-
-*{
-    margin: 0px;
-    padding: 0px;
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
 }
 
-.app{
-    display: none;
+body {
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* App Container */
+.app {
+  display: none;
+  height: 100vh;
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  margin: auto;
+  background: var(--card-bg);
+  overflow: hidden;
+  flex-direction: column;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  border-radius: 0;
+}
+
+/* Notification */
+.notification {
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--black-lighter);
+  color: white;
+  padding: 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  transform: translateY(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  border-bottom: 3px solid var(--primary);
+}
+
+/* Screen / Camera Area */
+.screen {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--black);
+  overflow: hidden;
+}
+
+.camera-frame {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  border-bottom: 1px solid var(--black-lighter);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+  z-index: 5;
+}
+
+.camera-indicator {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 6px 12px;
+  border-radius: 9999px;
+}
+
+.camera-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--danger);
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.camera-indicator span {
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Status Badge */
+.status-container {
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+  background-color: var(--black-light);
+  border-top: 1px solid var(--black-lighter);
+}
+
+.status-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.status {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid var(--danger);
+  color: var(--danger);
+  font-weight: 500;
+  font-size: 0.875rem;
+  background-color: var(--black-lighter);
+}
+
+/* Specific styling for locked status */
+#door_status_icon {
+  border: 2px solid var(--danger);
+  color: var(--danger);
+}
+
+.status-text {
+  margin-top: 8px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Button Area */
+.button-part {
+  display: flex;
+  padding: 16px;
+  gap: 12px;
+  background-color: var(--black-light);
+  border-top: 1px solid var(--black-lighter);
+}
+
+.button-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.button-icon-right {
+  width: 18px;
+  height: 18px;
+  margin-left: 8px;
+}
+
+.open-button,
+.close-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.open-button {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: none;
+}
+
+.open-button:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+}
+
+.close-button {
+  background-color: var(--black-lighter);
+  color: white;
+  box-shadow: none;
+  border: 1px solid var(--primary);
+}
+
+.close-button:hover:not(:disabled) {
+  background-color: rgba(255, 119, 0, 0.1);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Login Screen */
+.login {
+  background: var(--black);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.login-card {
+  width: 90%;
+  max-width: 480px;
+  background-color: var(--black-light);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--black-lighter);
+}
+
+.login-header {
+  padding: 32px 24px 24px;
+  text-align: center;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(255, 119, 0, 0.5);
+}
+
+.logo svg {
+  width: 28px;
+  height: 28px;
+  color: white;
+}
+
+.login-header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.login-header p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.password-container {
+  padding: 0 24px 24px;
+}
+
+.password-container label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--gray-400);
+}
+
+.password,
+.username {
+  width: 100%;
+  padding: 14px 14px 14px 40px;
+  border: 1px solid var(--primary);
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  background-color: var(--black-lighter);
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.password:focus,
+.username:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(255, 119, 0, 0.2);
+}
+
+.password-submit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.password-submit:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+}
+
+.login-footer {
+  padding: 16px 24px;
+  text-align: center;
+  border-top: 1px solid var(--black-lighter);
+  background-color: var(--black);
+}
+
+.login-footer p {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 480px) {
+  .app {
+    width: 100%;
     height: 100vh;
-    width: 30vw;
-    position: relative;
-    margin: auto;
-    background-color: var(--primary-color);
-    text-align: center;
-    overflow: hidden;
-    justify-content: space-between;
-    flex-direction: column;
-    /* align-items: center; */
-}
+    border-radius: 0;
+    max-width: none;
+  }
 
-.screen{
-    margin: auto;
-    flex: 0.8;
-    height: 90vh;
-    margin: 0px !important;
+  .login-card {
     width: 100%;
-}
-
-.status{
-    position: absolute;
-    width: 3rem;
-    height: 3rem;
-    right: 10px;
-    top: 10px;
-    border-radius: 100%;
-    display: flex;
-    color: var(--close);
-    justify-content: center;
-    border: 1px solid var(--close);
-    font-size: 1.1rem;
-    font-weight: 700;
-    align-items: center;
-}
-
-.image{
-    width: 100%;
-    height: 100%;
-}
-
-.notification{
-    position: absolute;
-    z-index: 10;
-    background-color: black;
-    width: 99%;
-    transition: all 0.2 ease;
-    transform: scaleY(0);
-    padding: 1%;
-    font-size: 1.1rem;
-    color: white;
-}
-
-.button-part{
-    display: flex;
-    flex: 0.2;
-    height: 20vh;
-    width: 100%;
-    justify-content: space-around;
-}
-
-.open-button{
-    border: 1px solid var(--open);
-    color: black;
-    /* background-color: var); */
-}
-
-.open-button:active{
-    color: var(--primary-color);
-    transition: all 0.2s ease;
-    background-color: var(--open);
-}
-
-.close-button{
-    border: 1px solid var(--close);
-    color: white;
-    background-color: var(--close);
-}
-
-.close-button:active{
-    color: var(--close);
-    background-color: transparent;
-    transition: all 0.2s ease;
-}
-
-button{
-    padding: 10px;
-    width: 50%;
-    font-size: 1.3rem;
-    font-weight: 500;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-
-.password-container{
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height:50%;
-    width: 50%;
-    align-items: center;
-}
-
-.password-container > span{
-    display: block;
-    font-size: 1.5rem;
-
-}
-
-.password-container > button{
-    margin-top: 20px;
-    font-size: 1.2rem;
-    border-style: none;    
-}
-
-.password-container > button:active{
-    color: rgb(139, 43, 43);    
-    background-color: black;
-}
-
-
-.password{
-    width: 100%;
-    font-size: 1.2rem;
-    border: 0px;
-    position: relative;
-    display: block;
-    background-color: transparent;
-    border-bottom: 1px solid black;
-    transition: all 0.1s ease;
-}
-
-.password::after{
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    content:'';
-    background-color: black;
-
-}
-
-
-.password:focus{
-    outline: none;
-    border-bottom: 2px solid black;
-}
-
-.login{
-    background-color: rgb(234, 234, 234);
-    width: 100%;
-    display: block;
+    max-width: none;
     height: 100vh;
-    outline: none;
+    border-radius: 0;
+  }
+
+  .login-header {
+    padding-top: 48px;
+  }
 }
 
-@media only screen and (max-width: 700px){
-    .app{
-        width: 100vw;
-        height: 100vh;
-    }
-    .screen{
-        width: 100%;
-        height: 90vh;
-    }
+/* Loading Spinner */
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+  margin-right: 8px;
+}
 
-    .button-part{
-        width: 100%;
-        height: 10vh;
-    }
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Shake Animation */
+.shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}
+
+/* Fade Transitions */
+.image {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.app, .login {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Status Indicator States */
+.status.locked {
+  border: 2px solid var(--danger);
+  color: var(--danger);
+}
+
+.status.unlocked {
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+/* Notification Active State */
+.notification.active {
+  transform: translateY(0);
 }

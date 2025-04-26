@@ -84,7 +84,7 @@ async def open_lock(req: Request,res:Response):
     if not motor.isOpen:
         if(compare_face()):
             # motor.open()
-            await bitmoro.send_bulk_message("Your door has been unlocked",["9869618708"])
+            await bitmoro.send_bulk_message("Your door has been unlocked",["9869618708","9860055455"])
             return {"msg": "Lock opened"}
         else:
             await bitmoro.send_bulk_message("Unauthorized access to door lock",["9869618708"])
