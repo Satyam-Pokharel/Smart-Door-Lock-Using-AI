@@ -56,6 +56,22 @@ def login(response: Response, password: Password):
     response.set_cookie("code", secret, 24*60*60*60, expires=1*60*60)
     return {"msg": "success"}
 
+@app.post("/emergency-unlock")
+async def emergency_unlock(res:Response,password: Password):
+    if password.password != open(os.path.join(os.getcwd(), "src/masterpassword.txt"), "r").read().strip():
+        res.status_code=400
+        return {"msg": "Wrong Password access Denied"}
+    # motor.open()
+    await bitmoro.send_bulk_message("Your Door has been Unlocked Emergently",["9869618708"])
+    res.status_code=200
+    return {"msg": "Lock opened"}
+
+@app.get("/train")
+async def train(websocket: WebSocket):
+    if not authenticate(websocket):
+        return {"msg": "Login First"}
+    take_register_user()
+
 
 @app.websocket("/camera")
 async def camera(websocket: WebSocket):
@@ -83,14 +99,19 @@ async def open_lock(req: Request,res:Response):
         return {"msg": "Login First"}
     if not motor.isOpen:
         if(compare_face()):
-            # motor.open()
-            await bitmoro.send_bulk_message("Your door has been unlocked",["9869618708","9860055455"])
+            await bitmoro.send_bulk_message("Your door has been unlocked",["9869618708"])
             return {"msg": "Lock opened"}
         else:
             await bitmoro.send_bulk_message("Unauthorized access to door lock",["9869618708"])
             res.status_code=400
             return {"msg": "FaceId doesn't match"}
     return {"msg": "Lock was opened"}
+
+@app.get("/forget-password")
+async def close_lock(req: Request):
+    password=open(os.path.join(os.getcwd(), "src/masterpassword.txt"), "r").read().strip()
+    await bitmoro.send_bulk_message("Your password for door is "+ password,["9869618708"])
+    return {"msg": "Password sent to your phone"}
 
 
 @app.get("/close-lock")

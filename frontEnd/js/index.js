@@ -10,11 +10,52 @@
   const styles = getComputedStyle(document.documentElement);
   const open = document.querySelector(".open-button");
   const close = document.querySelector(".close-button");
-  document
-    .querySelector(".password-submit")
-    .addEventListener("click",onPasswordSubmit);
+  document.querySelector(".password-submit").addEventListener("click",onPasswordSubmit);
   open.addEventListener("click", onOpen);
   close.addEventListener("click", onClose);
+
+  document.getElementById('myForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevents the page from reloading
+    myFunction();
+  });
+
+  document.getElementById('forgot-password').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevents the page from reloading
+    fetch("/forget-password", { method: "get" }).then(async ()=>{
+        login_not.innerText = "Password sent to your phone number";
+        login_not.style.transform = "scaleY(1)";
+        setTimeout(() => (login_not.style.transform = "scaleY(0)"), 5000);
+    })
+  });
+
+  function myFunction() {
+    const inputValue = document.getElementById('myInput').value;
+    fetch("/emergency-unlock", {
+      method: "post",
+      body: JSON.stringify({ password: inputValue }),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(async (res) => {
+      const resp = await res.json();
+      if(res.status==400){
+        notification.innerText = "Password do not match";
+      }
+      else{
+        notification.innerText = "Door unlocked";
+        status.innerText = "Open";
+        status.style.borderColor = styles.getPropertyValue("--open");
+        status.style.color = styles.getPropertyValue("--open");
+      }
+        open.disabled = false;
+        notification.style.transform = "scaleY(1)";
+        setTimeout(() => (notification.style.transform = "scaleY(0)"), 5000);
+    })
+    .catch(() => {
+      open.disabled = false;
+    });
+  }
 
   function register_user(){
 

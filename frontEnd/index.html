@@ -50,15 +50,17 @@
           </svg>
           <span>Unlock Door</span>
         </button>
-
         <button class="close-button" id="lock_button">
-          
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="button-icon">
             <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
           <span>Lock Door</span>
         </button>
+        <form id="myForm">
+          <input type="text" id="myInput" placeholder="Emergency Password" required />
+          <button type="submit">Unlock</button>
+        </form>
       </div>
     </div>
 
@@ -87,22 +89,27 @@
             </svg>
             <input type="password" id="password" class="password" name="password" placeholder="Enter your password" />
           </div>
-          <button class="password-submit" id="login_submit">
-            <span>Login</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="button-icon-right">
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </button>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+            <button class="password-submit" id="login_submit" style="width: 100%;">
+              <span>Login</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="button-icon-right">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </button>
+            
+            <button id="forgot-password" style="background: none; border: none; color: #007bff; font-size: 14px; cursor: pointer; text-decoration: underline;">Forgot password?</button>
+          </div>
+          
         </div>
 
         <div class="login-footer">
-          <p>Smart Door Lock System v2.0</p>
+          <p>Smart Door Lock System</p>
         </div>
       </div>
     </div>
 
-    <!-- Your JavaScript -->
-    <script type="text/javascript" src="./js/index.js"></script>
   </body>
+  <script type="text/javascript" src="./js/index.js"></script>
+
 </html>
