@@ -1,11 +1,11 @@
 from fastapi import FastAPI, WebSocket, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from .stream import WebStream
+from .detection import compare_face
 from .motorController import MotorController
 import os
 import asyncio
 import requests
-from .detection import compare_face
 from collections import deque
 import time
 import secrets
@@ -13,6 +13,13 @@ from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
 from bitmoro.bitmoro import Bitmoro
 import time
+import cv2
+
+from src import WebCamVideoStream
+from multiprocessing import Queue
+from fastapi import FastAPI
+import cv2
+import os
 
 class Password(BaseModel):
     password: str
@@ -30,6 +37,9 @@ app.add_middleware(
 )
 connectedDevice = deque()
 stream = WebStream()
+camera=cv2.VideoCapture(0)
+stream.connectToCamera(camera)
+
 motor = MotorController()
 cookies = []
 
@@ -61,22 +71,19 @@ async def emergency_unlock(res:Response,password: Password):
     if password.password != open(os.path.join(os.getcwd(), "src/masterpassword.txt"), "r").read().strip():
         res.status_code=400
         return {"msg": "Wrong Password access Denied"}
-    # motor.open()
+    motor.open()
     await bitmoro.send_bulk_message("Your Door has been Unlocked Emergently",["9869618708"])
     res.status_code=200
     return {"msg": "Lock opened"}
 
-@app.get("/train")
-async def train(websocket: WebSocket):
-    if not authenticate(websocket):
-        return {"msg": "Login First"}
-    take_register_user()
-
+# @app.get("/train")
+# async def train(websocket: WebSocket):
+#     if not authenticate(websocket):
+#         return {"msg": "Login First"}
+#     take_register_user()
 
 @app.websocket("/camera")
 async def camera(websocket: WebSocket):
-    print("NO ")
-
     if not authenticate(websocket):
         return {"msg": "Login First"}
     await asyncio.sleep(0)
@@ -88,9 +95,10 @@ async def camera(websocket: WebSocket):
             try:
                 await asyncio.sleep(0)
                 sock = connectedDevice.popleft()
-                await sock.send_bytes(stream.camera())
+                await sock.send_bytes(stream.streams())
                 connectedDevice.append(sock)
-            except:
+            except Exception as e :
+                print(e)
                 pass
 
 @app.get("/open-lock")
@@ -98,7 +106,8 @@ async def open_lock(req: Request,res:Response):
     if not authenticate(req):
         return {"msg": "Login First"}
     if not motor.isOpen:
-        if(compare_face()):
+        if(await compare_face()):
+            motor.open()
             await bitmoro.send_bulk_message("Your door has been unlocked",["9869618708"])
             return {"msg": "Lock opened"}
         else:

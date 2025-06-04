@@ -1,12 +1,15 @@
 import face_recognition
 import pickle
-if __name__!="__main__":
-    from .camera import WebCamVideoStream
 from itertools import chain
 import cv2
 import numpy as np
 import time
+import asyncio
 import os
+if __name__ == "__main__":
+    from camera import WebCamVideoStream
+else:
+    from src.camera import WebCamVideoStream
 import telegram  # Import python-telegram-bot library
 from dotenv import load_dotenv  # Import python-dotenv to load .env file
 
@@ -28,24 +31,24 @@ def compare_encoding(image, authorized_encodings):
     except:
         return False
 
-def send_image_to_telegram(image_path):
+async def send_image_to_telegram(image_path):
     """Send the unauthorized user image to the admin via Telegram (synchronously)."""
     try:
         bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
         with open(image_path, 'rb') as photo:
-            bot.send_photo(chat_id=ADMIN_CHAT_ID, photo=photo, caption="Unauthorized user detected!")
+            await bot.send_photo(chat_id=ADMIN_CHAT_ID, photo=photo, caption="Unauthorized user detected!")
         print(f"Image sent to Telegram admin (chat ID: {ADMIN_CHAT_ID})")
     except Exception as e:
         print(f"Error sending image to Telegram: {e}")
 
-def saveFaceToFolder(image):
+async def saveFaceToFolder(image):
     try:
         filename = os.path.join(os.path.dirname(__file__), "..", "Unauthorized", f"{int(time.time())}.png")
-        cv2.imwrite(filename, image)  # Saving as-is (RGB), will cause blue tint
+        cv2.imwrite(filename, image)  
         print(f"Saved unauthorized user photo to {filename}")
 
-        # Send the saved image to Telegram admin (synchronously)
-        send_image_to_telegram(filename)
+        # Send the saved image to Telegram admin 
+        await send_image_to_telegram(filename)
     except Exception as e:
         print(f"Error saving unauthorized user photo: {e}")
 
@@ -67,11 +70,13 @@ def load_authorized_encoding(encoding_file_path):
         return []
 
 def save_encoding(authorized_encodings):
-    with open("C:\\Users\\satya\\Desktop\\IOT\\encoding\\user.txt", 'wb') as file:
+    with open("/home/satya/IOT/encoding/user.txt", 'wb') as file:
         pickle.dump(authorized_encodings, file)
 
 def take_register_user():
     stream = WebCamVideoStream()
+    camera=cv2.VideoCapture(0)
+    stream.connectToCamera(camera)
     image_frames = []
     for i in range(200):
         print(i)
@@ -79,19 +84,18 @@ def take_register_user():
         image_frames.append(rgb_frame)
     create_encoding(image_frames, "users.pk1")
 
-def compare_face():
+async def compare_face():
     try:
         stream = WebCamVideoStream()
         rgb_frame = cv2.cvtColor(stream.read_frame(), cv2.COLOR_BGR2RGB)
-        authorized_encoding = load_authorized_encoding("C:\\Users\\satya\\Desktop\\IOT\\encoding\\user.txt")
+        authorized_encoding = load_authorized_encoding("/home/satya/IOT/encoding/user.txt")
         result = compare_encoding(rgb_frame, authorized_encoding)
         if result == 0:
-            saveFaceToFolder(rgb_frame)
+            await saveFaceToFolder(rgb_frame)
         return result
     except Exception as e:
         print(f"Error in compare_face: {e}")
         return False
 
 if __name__ == "__main__":
-    from camera import WebCamVideoStream
     take_register_user()
