@@ -1,3 +1,21 @@
+
+# Project-specific folders
 /iot-project
 /env
 /Unauthorized/
+
+# Python-related
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Editor and system files
+.DS_Store
+*.swp
+
+# Environment files
+.env
